@@ -18,6 +18,45 @@ public class PlayerController : NetworkBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         gameObject.SetActive(true);
+        SpriteRenderer sr = rb.GetComponent<SpriteRenderer>();
+        for (int i = 0; i<NetworkManager.Singleton.ConnectedClientsIds.Count; i++)
+        {
+            if (NetworkManager.Singleton.ConnectedClientsIds[i] == NetworkObject.OwnerClientId)
+            {
+            if (i == 0)
+            {
+                if (sr != null) 
+                {
+                    sr.color = Color.blue;
+                }
+            }
+            else if (i == 1)
+            {
+                if (sr != null) 
+                {
+                    sr.color = Color.red;
+                }
+            }
+            else if (i == 2)
+            {
+                if (sr != null) 
+                {
+                    sr.color = Color.green;
+                }
+            }
+            else if (i == 3)
+            {
+                if (sr != null) 
+                {
+                    sr.color = Color.yellow;
+                }
+            }
+            }
+        }
+        GameManager.Instance.setLevel(SceneManager.GetActiveScene().name);
+
+
+
     }
 
     void Update()
@@ -53,6 +92,8 @@ public class PlayerController : NetworkBehaviour
             {
                 GameManager.Instance.AddScoreServ(i+1);
                 AddScoreRpc(i, GameManager.Instance.p1Score, GameManager.Instance.p2Score, GameManager.Instance.p3Score, GameManager.Instance.p4Score);
+                AudioManager.Instance.playCoinSound(10) ;
+
 
                 
             }
@@ -63,7 +104,8 @@ public class PlayerController : NetworkBehaviour
     void AddScoreRpc(int i, int s1, int s2, int s3, int s4)
     {
         GameManager.Instance.AddScore(i+1, s1, s2, s3, s4);
-        Debug.Log(s1);
+        AudioManager.Instance.playCoinSound(10) ;
+        //Debug.Log(s1);
     }
  
     void OnCollisionEnter2D(Collision2D collision)  // Ground and enemy detection
@@ -104,6 +146,7 @@ public class PlayerController : NetworkBehaviour
                     GameManager.Instance.addDied();
                 }
             }
+            AudioManager.Instance.playDamageSound(1);
 
 
         }
@@ -125,10 +168,11 @@ public class PlayerController : NetworkBehaviour
             //if(true)
             {
                 sendScore();
+                
             }
             
-            Destroy(collision.gameObject);
-            //CoinPoolManager.Instance.ReturnCoin(collision.gameObject);
+            //Destroy(collision.gameObject);
+            CoinPoolManager.Instance.ReturnCoin(collision.gameObject);
             
         } 
 
@@ -137,9 +181,17 @@ public class PlayerController : NetworkBehaviour
             
             if (IsServer)
             {
-                GameManager.Instance.addCleared();
+                
                 health.Value = 0;
+                for (int i = 0; i<NetworkManager.Singleton.ConnectedClientsIds.Count; i++)
+                {
+                    if (NetworkManager.Singleton.ConnectedClientsIds[i] == NetworkObject.OwnerClientId)
+                    {
+                        GameManager.Instance.addCleared(i+1);
+                    }
+                }
             }
+                
             
             //NetworkManager.SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
         }

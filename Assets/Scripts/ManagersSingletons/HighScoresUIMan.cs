@@ -13,7 +13,7 @@ public class HighScoresUIMan : MonoBehaviour
     
     void DisplayHighScores()
     {
-        List<HighScore> topScores = DatabaseManager.Instance.GetTopHighScores(5);
+        List<HighScore> topScores = DatabaseManager.Instance.GetTopHighScores("1-1");
         
         for (int i = 0; i < scoreTexts.Length; i++)
         {
@@ -21,7 +21,7 @@ public class HighScoresUIMan : MonoBehaviour
             {
                 HighScore score = topScores[i];
                 int rank = i + 1;
-                scoreTexts[i].text = rank + ". " + score.PlayerName + " - " + 
+                scoreTexts[i].text = rank + ". " + score.PlayerNumber + " - " + 
                                     score.Score + " pts - " + 
                                     score.CompletionTime.ToString("F1") + "s";
             }

@@ -10,26 +10,11 @@ using Unity.Netcode;
 public class UIPlayers : NetworkBehaviour
 {
     public TextMeshProUGUI P1ready;
-    public TextMeshProUGUI P2ready;
-    public TextMeshProUGUI P3ready;
-    public TextMeshProUGUI P4ready;
-
-    public TextMeshProUGUI[] players = new TextMeshProUGUI[4];
-    
-
-    void Start()
-    {
-        
-        players[0] = P1ready;
-        players[1] = P2ready;
-        players[2] = P3ready;
-        players[3] = P4ready;
-    }
 
     void Update()
     {
         
-        if (players[0].text.Equals("Yes"))
+        if (P1ready.text.Equals("Yes"))
         {
             //SceneManager.LoadScene("WorldMap");
             NetworkManager.SceneManager.LoadScene("WorldMap", LoadSceneMode.Single);
@@ -37,16 +22,14 @@ public class UIPlayers : NetworkBehaviour
     }
 
     public void PlayersReady(int player)
-    {
-        player -= 1;
-        if (!players[player].text.Equals("Yes"))
+    {   
+        if (IsServer)
         {
-            players[player].text = "Yes";
+            P1ready.text = "Yes";
+            NetworkManager.Singleton.SceneManager.LoadScene("WorldMap", LoadSceneMode.Single);
         }
-        else
-        {
-            players[player].text = "No";
-        }
+        
+
     }
     
     /*

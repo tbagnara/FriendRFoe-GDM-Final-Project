@@ -12,7 +12,9 @@ public class UIManager : NetworkBehaviour
     //public TextMeshProUGUI scoreText3;
     //public TextMeshProUGUI scoreText4;
     [SerializeField] public List<TextMeshProUGUI> scoreTexts;
-    public TextMeshProUGUI healthText;
+    public TextMeshProUGUI timeText;
+ 
+
     
     void OnEnable()
     //void Start()
@@ -22,11 +24,10 @@ public class UIManager : NetworkBehaviour
         GameManager.Instance.onScore2Changed += UpdateScore2;
         GameManager.Instance.onScore3Changed += UpdateScore3;
         GameManager.Instance.onScore4Changed += UpdateScore4;
-        GameManager.Instance.onHealthChanged += UpdateHealth;
-        GameManager.Instance.onGameOver += HandleGameOver;
+        //GameManager.Instance.onHealthChanged += UpdateHealth;
         for (int i = 0; i <NetworkManager.Singleton.ConnectedClientsList.Count; i++)
         {
-            scoreTexts[i].text = "Player " + (i+1) + "score:";
+            scoreTexts[i].text = "Player " + (i+1) + " Score:";
         }
     }
     void OnDisable()
@@ -35,34 +36,42 @@ public class UIManager : NetworkBehaviour
         GameManager.Instance.onScore1Changed -= UpdateScore2;
         GameManager.Instance.onScore1Changed -= UpdateScore3;
         GameManager.Instance.onScore1Changed -= UpdateScore4;
-        GameManager.Instance.onHealthChanged -= UpdateHealth;
-        GameManager.Instance.onGameOver -= HandleGameOver;
+        //GameManager.Instance.onHealthChanged -= UpdateHealth;
+    }
+
+    void Update()
+    {
+        UpdateTime();
     }
     void UpdateScore1(int score)
     {
-        scoreTexts[0].text = "Player 1 score: " + score;
+        scoreTexts[0].text = "Player 1 Score: " + score;
     }
     void UpdateScore2(int score)
     {
-        scoreTexts[1].text = "Player 2 score: " + score;
+        scoreTexts[1].text = "Player 2 Score: " + score;
     }
     void UpdateScore3(int score)
     {
-        scoreTexts[2].text = "Player 3 score: " + score;
+        scoreTexts[2].text = "Player 3 Score: " + score;
     }
     void UpdateScore4(int score)
     {
-        scoreTexts[3].text = "Player 4 score: " + score;
+        scoreTexts[3].text = "Player 4 Score: " + score;
     }
-    void UpdateHealth(int newHealth)
+    void UpdateTime()
     {
-        healthText.text = "Health: " + newHealth;
-    }
-    void HandleGameOver()
-    {
-        NetworkManager.SceneManager.LoadScene("Highcores", LoadSceneMode.Single);
+        timeText.text = ""+(int) Time.timeSinceLevelLoad;
     }
 
+
+    public void PauseGame()
+    {
+        if (IsServer)
+        {
+            NetworkManager.SceneManager.LoadScene("PauseMenu",LoadSceneMode.Single);
+        }
+    }   
     
 
 }

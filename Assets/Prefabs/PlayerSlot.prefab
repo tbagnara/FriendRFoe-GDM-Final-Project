@@ -8,6 +8,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7890131322428227774, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2874982326
+      objectReference: {fileID: 0}
+    - target: {fileID: 1923501040846796511, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1923501040846796511, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1923501040846796511, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1923501040846796511, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.2681875
@@ -48,6 +64,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4191889103786144737, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
+      propertyPath: m_Color.b
+      value: 0.015686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 4191889103786144737, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
+      propertyPath: m_Color.g
+      value: 0.92156863
+      objectReference: {fileID: 0}
+    - target: {fileID: 4191889103786144737, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6422751832403354815, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 3841912451
@@ -62,13 +90,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8905083197000509317, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
       propertyPath: m_Name
-      value: Player (1) Variant
+      value: PlayerSlot
       objectReference: {fileID: 0}
     - target: {fileID: 8905083197000509317, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 981457446573319501, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
+    - {fileID: 2080785647110428387, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
+    - {fileID: 3168919309511242295, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
+    - {fileID: 4510031145302172397, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
+    - {fileID: -1142445882574318902, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
+    - {fileID: 4477825518003219495, guid: 10fdd60844a6d6342ae70c986b9bcd27, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

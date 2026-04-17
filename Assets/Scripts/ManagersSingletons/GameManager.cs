@@ -3,6 +3,8 @@ using UnityEngine;
 using Unity.Netcode;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : NetworkBehaviour
 {
@@ -14,7 +16,7 @@ public class GameManager : NetworkBehaviour
     public event Action<int> onScore4Changed;
 
     public event Action<int> onHealthChanged;
-    public event Action onGameOver;
+    public event Action<int> onGameOver;
     //private int score = 0;
     private int health = 10;
     private float completionTime = 0f;
@@ -24,13 +26,9 @@ public class GameManager : NetworkBehaviour
     public int p3Score= 0;
     public int p4Score = 0;
 
-
-
-    
-    
-
-
+    private string level;
     private int playersCleared = 0;
+    private int playersClearedUp = 0;
     private int playersDied = 0;
 
 
@@ -46,9 +44,26 @@ public class GameManager : NetworkBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void addCleared()
+    public void addCleared(int player)
     {
         playersCleared++;
+        if (player == 1)
+        {
+            DatabaseManager.Instance.SaveLevelScore(SceneManager.GetActiveScene().name, "1", p1Score,(int) Time.timeSinceLevelLoad);
+        }
+        else if (player == 2)
+        {
+            DatabaseManager.Instance.SaveLevelScore(SceneManager.GetActiveScene().name, "2", p2Score,(int) Time.timeSinceLevelLoad);
+        }
+        else if (player == 3)
+        {
+            DatabaseManager.Instance.SaveLevelScore(SceneManager.GetActiveScene().name, "3", p3Score,(int) Time.timeSinceLevelLoad);
+        }
+        else if (player == 4)
+        {
+            DatabaseManager.Instance.SaveLevelScore(SceneManager.GetActiveScene().name, "4", p4Score,(int) Time.timeSinceLevelLoad);
+        }
+        SaveLoadManager.Instance.RecordCleared(SceneManager.GetActiveScene().name);
     }
 
     public void addDied()
@@ -59,29 +74,27 @@ public class GameManager : NetworkBehaviour
     
     void Update()
     {   
-        
-        if ((playersCleared+playersDied) >= NetworkManager.Singleton.ConnectedClientsIds.Count) {
-            if (playersCleared>0)
-            {
-                //onGameOver?.Invoke();
-                NetworkManager.SceneManager.LoadScene("WorldMap", UnityEngine.SceneManagement.LoadSceneMode.Single);
-
-            }
-            else
-            {
-                NetworkManager.SceneManager.LoadScene("WorldMap", UnityEngine.SceneManagement.LoadSceneMode.Single);
-            }
-            playersCleared = 0;
-            playersDied = 0;
-            //ResetGameStats();
-        }
-        
-        /*
-        if (FindFirstObjectByType<PlayerController>() == null)
+        if (IsServer)
         {
-            NetworkManager.SceneManager.LoadScene("WorldMap", UnityEngine.SceneManagement.LoadSceneMode.Single);
-        }*/
+            if ((playersCleared+playersDied) >= NetworkManager.Singleton.ConnectedClientsIds.Count) {
+                
+                
+                NetworkManager.SceneManager.LoadScene("GameEnd", UnityEngine.SceneManagement.LoadSceneMode.Single);
+                playersClearedUp = playersCleared;
+                UpdateClearedUpRpc(playersCleared);
+                onGameOver?.Invoke(playersClearedUp);
 
+                playersCleared = 0;
+                playersDied = 0;
+                ResetGameStats();
+            }
+        }
+
+    }
+    [Rpc(SendTo.NotServer)]
+    void UpdateClearedUpRpc(int playersCl)
+    {
+        playersClearedUp = playersCl;
     }
     
     
@@ -109,7 +122,7 @@ public class GameManager : NetworkBehaviour
         {   
             onScore4Changed?.Invoke(p4Score);
         }
-        Debug.Log(p1Score +" - "+p2Score);
+        //Debug.Log(p1Score +" - "+p2Score);
         //onScoreChanged?.Invoke(10);
     }
 
@@ -120,7 +133,7 @@ public class GameManager : NetworkBehaviour
         if (player == 1)
         {   
             p1Score += 10;
-            Debug.Log("add 10 to score" + p1Score);    
+            //Debug.Log("add 10 to score" + p1Score);    
             //onScore1Changed?.Invoke(p1Score.Value);
         }
         else if (player == 2)
@@ -154,6 +167,20 @@ public class GameManager : NetworkBehaviour
         return completionTime;
     }
 
+    public string getLevel()
+    {
+        return level;
+    }
+    public void setLevel(string levelName)
+    {
+        level = levelName;
+    }
+
+    public int getPlayersCleared()
+    {
+        return playersClearedUp;
+    }
+
     public void TakeDamage(int damage)
     {
         health -= damage;
@@ -172,6 +199,24 @@ public class GameManager : NetworkBehaviour
         p4Score = 0;
         health = 10;
         
+        
+    }
+
+    void ResetGameStats()
+    {
+        p1Score = 0;
+        p2Score = 0;
+        p3Score = 0;
+        p4Score = 0;
+        health = 10;
     }
     
+    public void ResetGameClears()
+    {
+        playersCleared = 0;
+        playersDied = 0;
+        playersClearedUp = 0;
+    }
+
+
 }

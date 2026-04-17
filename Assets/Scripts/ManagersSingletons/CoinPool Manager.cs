@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class CoinPoolManager : MonoBehaviour
 {
@@ -19,8 +19,8 @@ public class CoinPoolManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
         
+
         // Find all existing coins in the scene
         GameObject[] existingCoins = GameObject.FindGameObjectsWithTag("Coin");
         coinStartPositions = new List<Vector3>();
@@ -29,7 +29,7 @@ public class CoinPoolManager : MonoBehaviour
         {
             coinStartPositions.Add(coin.transform.position);
             Destroy(coin); // Remove scene-placed coins
-            Debug.Log("destroyed");
+        
         }
         
         // Create pool
@@ -47,7 +47,8 @@ public class CoinPoolManager : MonoBehaviour
             GameObject coin = coinPool.Get();
             coin.transform.position = position;
             activeCoins.Add(coin);
-            Debug.Log("spawnedcoin");
+            Debug.Log("coinsspanwed");
+
         }
     }
     
@@ -55,6 +56,7 @@ public class CoinPoolManager : MonoBehaviour
     {
         coinPool.Return(coin);
         activeCoins.Remove(coin);
+        Debug.Log("returnedcoin");
     }
     
     public void ResetAllCoins()
@@ -69,4 +71,5 @@ public class CoinPoolManager : MonoBehaviour
         // Respawn them
         SpawnAllCoins();
     }
+    
 }

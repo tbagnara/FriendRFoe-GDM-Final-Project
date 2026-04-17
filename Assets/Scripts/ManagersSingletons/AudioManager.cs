@@ -54,12 +54,12 @@ public class AudioManager : MonoBehaviour
         GameManager.Instance.onScoreChanged -= playCoinSound;
         GameManager.Instance.onHealthChanged -= playDamageSound;
     }
-    void playCoinSound(int newscore)
+    public void playCoinSound(int newscore)
     {
         PlaySoundEffect(coinSound);
     }
 
-    void playDamageSound(int damage)
+    public void playDamageSound(int damage)
     {
         PlaySoundEffect(damageSound);
     }
